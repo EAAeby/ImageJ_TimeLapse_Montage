@@ -1,0 +1,54 @@
+setBatchMode(true);
+
+col = 12;
+row = 8;
+slice = 2;
+//iwidth = 300;
+//iheight = 200;
+n= nSlices;
+id=getImageID;
+
+Dialog.create("Make time lapse of montage");
+Dialog.addNumber("Columns",col,0,5," ");
+Dialog.addNumber("Rows",row,0,5," ");
+Dialog.addNumber("Slices",slice,0,5," ");
+//Dialog.addNumber("Width of single image in px", iwidth,0,5,"px");
+//Dialog.addNumber("Height of single image in px", iheight,0,5,"px");
+
+Dialog.show();
+
+col = Dialog.getNumber();
+row = Dialog.getNumber();
+slice = Dialog.getNumber();
+//iwidth = Dialog.getNumber();
+//iheight = Dialog.getNumber();
+
+
+selectImage(id);
+iwidth=getWidth();
+iheight=getHeight();
+
+
+newImage("montage", "RGB+black", col*iwidth, row*iheight, slice);
+montage=getImageID;
+
+
+for(j=0; j<row; j++){
+for (i=0; i<col; i++) {
+for(k=0; k<slice; k++){
+selectImage(montage);
+setSlice(k+1);
+selectImage(id);
+setSlice(j*(col*slice)+i*(slice)+k+1);
+run("Select All");
+run("Copy");
+selectImage(montage);
+makeRectangle((i)*iwidth, (j)*iheight, iwidth, iheight);
+run("Paste");
+}
+}
+}
+
+
+
+setBatchMode(false);
